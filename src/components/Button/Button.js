@@ -102,7 +102,7 @@ class Button2 extends Component {
                 onClick={this.handleOpenDialog}
                 startIcon={<CloudUploadIcon />}
               >
-                Upload
+                Upload as CSV
               </Button>
               {/* <button
                 type="button"

@@ -7,6 +7,7 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Button2 from "../Button/Button";
 import Form from "../Form/Form";
+import Fileupload from "../Fileupload/Fileupload";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -62,7 +63,7 @@ export default function HorizontalLinearStepper() {
       case 1:
         return <Form />;
       case 2:
-        return "This is the bit I really care about!";
+        return <Fileupload />
       default:
         return "Unknown step";
     }
@@ -146,7 +147,7 @@ export default function HorizontalLinearStepper() {
               >
                 Back
               </Button>
-              {isStepOptional(activeStep) && (
+              {/* {isStepOptional(activeStep) && (
                 <Button
                   variant="contained"
                   color="primary"
@@ -155,7 +156,7 @@ export default function HorizontalLinearStepper() {
                 >
                   Skip
                 </Button>
-              )}
+              )} */}
 
               <Button
                 variant="contained"
