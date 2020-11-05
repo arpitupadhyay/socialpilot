@@ -31,12 +31,8 @@ export default function HorizontalLinearStepper() {
 
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
-  const [csvObj, setCsvObj] = React.useState({
-      address: "",
-      bedroom: 0,
-      bathroom: 0,
-      description: ""
-  });
+  const [csvObj, setCsvObj] = React.useState("");
+  const [formData, setFormData] = React.useState("");
   const [skipped, setSkipped] = React.useState(new Set());
   const steps = getSteps();
 
@@ -50,10 +46,16 @@ export default function HorizontalLinearStepper() {
   const handleCallback = (data) => {
       handleNext();
   };
-
+  const handleFormData = (data) => {
+    console.log("data from form",data)
+    setFormData(data.data)
+    handleNext();
+    console.log("formData",formData)
+  }
   const csvData = async (data) => {
       console.log("data from csv",data.data)
       await setCsvObj(data.data)
+      console.log("csvObj",csvObj)
   }
 
   const getStepContent = (step) => {
@@ -61,7 +63,7 @@ export default function HorizontalLinearStepper() {
       case 0:
         return <Button2 goToNextStep={handleCallback} dataFromCsv={csvData} />;
       case 1:
-        return <Form />;
+        return <Form submitData={handleFormData} />;
       case 2:
         return <Fileupload />
       default:

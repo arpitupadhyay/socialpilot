@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import AddIcon from "@material-ui/icons/Add";
 import { Fab } from "@material-ui/core";
 import DnD from "../DnD/DnD";
+import Button from "@material-ui/core/Button";
 
 class Fileupload extends Component {
   state = {
@@ -22,6 +23,45 @@ class Fileupload extends Component {
     console.log("this.state.files", this.state.files);
   };
 
+  finalSubmit = async () => {
+    let base64data = []
+    let data = await this.state.files.map((f) => {
+      return this.convertBase64(f).then((res) => {
+        console.log("Res",res)
+        return res
+      }).catch((e) => {
+        console.log("e",e)
+      })
+    });
+    await console.log("Data",data)
+    // console.log("base64",base64data)
+  };
+  async getBase64(file) {
+    var reader = await new FileReader();
+    let d = await reader.readAsDataURL(file);
+    console.log("D",d)
+    reader.onload = await function () {
+      console.log(reader.result);
+      return reader.result
+    };
+    reader.onerror = function (error) {
+      console.log('Error: ', error);
+    };
+ }
+  convertBase64 = async (file) => {
+    return await new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+
+      fileReader.onload = () => {
+        resolve(fileReader.result);
+      };
+
+      fileReader.onerror = (error) => {
+        reject(error);
+      };
+    });
+  };
   render() {
     const uploadImage = async (e) => {
       const file = e.target.files[0];
@@ -46,16 +86,26 @@ class Fileupload extends Component {
     };
 
     return (
-      <DnD handleDrop={this.handleDrop}>
-        <div style={{ height: 300, width: 250 }}>
-          {this.state.files.map((file, i) => (
-            <div key={i}>
-              <input type="checkbox" name="vehicle1" value={i} />
-              <label>{file.name}</label>
-            </div>
-          ))}
-        </div>
-      </DnD>
+      <div>
+        <DnD handleDrop={this.handleDrop}>
+          <div style={{ height: 300, width: 250 }}>
+            {this.state.files.map((file, i) => (
+              <div key={i}>
+                <input type="checkbox" name="vehicle1" value={i} />
+                <label>{file.name}</label>
+              </div>
+            ))}
+          </div>
+        </DnD>
+        <Button
+          onClick={this.finalSubmit}
+          variant="outlined"
+          color="primary"
+          className="mb-2"
+        >
+          Submit
+        </Button>
+      </div>
     );
   }
 }

@@ -14,6 +14,7 @@ class Form extends Component {
     this.handleBedroom = this.handleBedroom.bind(this);
     this.handleBathroom = this.handleBathroom.bind(this);
     this.handleDescription = this.handleDescription.bind(this);
+    this.submitForm = this.submitForm.bind(this);
   }
 
   async handleAddress(event) {
@@ -50,8 +51,11 @@ class Form extends Component {
     }
   }
 
+  submitForm() {
+    this.props.submitData({data: this.state});
+  }
+
   render() {
-    console.log("address: ", this.state.address);
     return (
       <form className="container">
         <h3>Add a Property Form</h3>
@@ -100,13 +104,14 @@ class Form extends Component {
             className="form-control"
             value={this.state.description}
             onChange={this.handleDescription}
-            placeholder="Enter Description"
+            placeholder="Enter Description (Optional)"
           />
         </div>
 
         <button
           type="button"
           disabled={this.state.isDisabled}
+          onClick={this.submitForm}
           className="btn btn-primary btn-block"
         >
           Submit
