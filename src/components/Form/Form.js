@@ -24,12 +24,18 @@ class Form extends Component {
     this.checkValidation();
   }
   async handleBedroom(event) {
+    if(event.target.value > 10) {
+      return false
+    }
     await this.setState({
       bedroom: event.target.value,
     });
     this.checkValidation();
   }
   async handleBathroom(event) {
+    if(event.target.value > 10) {
+      return false
+    }
     await this.setState({
       bathroom: event.target.value,
     });
@@ -78,6 +84,7 @@ class Form extends Component {
             type="number"
             min="1"
             max="10"
+            maxLength="2"
             name="bedroom"
             value={this.state.bedroom}
             onChange={this.handleBedroom}
@@ -90,6 +97,9 @@ class Form extends Component {
           <label>Bathroom</label>
           <input
             type="number"
+            min="1"
+            max="10"
+            maxLength="2"
             className="form-control"
             value={this.state.bathroom}
             onChange={this.handleBathroom}

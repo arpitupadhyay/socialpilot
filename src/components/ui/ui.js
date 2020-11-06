@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FC, ChangeEvent, FormEvent, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
@@ -31,7 +31,7 @@ export default function HorizontalLinearStepper() {
 
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
-  const [csvObj, setCsvObj] = React.useState("");
+  const [csvObj, setCsvObj] = useState("");
   const [formData, setFormData] = React.useState("");
   const [skipped, setSkipped] = React.useState(new Set());
   const steps = getSteps();

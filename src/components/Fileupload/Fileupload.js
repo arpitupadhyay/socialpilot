@@ -24,7 +24,6 @@ class Fileupload extends Component {
   };
 
   finalSubmit = async () => {
-    let base64data = []
     let data = await this.state.files.map((f) => {
       return this.convertBase64(f).then((res) => {
         console.log("Res",res)
@@ -33,8 +32,7 @@ class Fileupload extends Component {
         console.log("e",e)
       })
     });
-    await console.log("Data",data)
-    // console.log("base64",base64data)
+    console.log("Data",data)
   };
   async getBase64(file) {
     var reader = await new FileReader();
