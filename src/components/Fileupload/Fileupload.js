@@ -6,10 +6,23 @@ import Button from "@material-ui/core/Button";
 import { connect } from "react-redux";
 
 class Fileupload extends Component {
-  state = {
-    baseImage: "",
-    files: [],
-  };
+  // state = {
+  //   baseImage: "",
+  //   files: [],
+  //   formData: props.state
+  // };
+  constructor(props) {
+    super(props);
+    // props.state.address
+    // props.state.bedroom
+    // props.state.bathroom
+    // props.state.description
+    this.state = {
+      baseImage: "",
+      files: [],
+      formData: props.state
+    };
+  }
 
   handleDrop = (files) => {
     console.log("files", files);
@@ -26,27 +39,33 @@ class Fileupload extends Component {
 
   finalSubmit = async () => {
     let data = await this.state.files.map((f) => {
-      return this.convertBase64(f).then((res) => {
-        console.log("Res",res)
-        return res
-      }).catch((e) => {
-        console.log("e",e)
-      })
+      return this.convertBase64(f)
+        .then((res) => {
+          this.setState({
+            baseImage: res,
+          });
+          console.log("BASE64 IMAGE");
+          console.log(this.state.baseImage);
+          console.log("FORM DATA")
+          console.log(this.state.formData)
+        })
+        .catch((e) => {
+          console.log("e", e);
+        });
     });
-    console.log("Data",data)
   };
   async getBase64(file) {
     var reader = await new FileReader();
     let d = await reader.readAsDataURL(file);
-    console.log("D",d)
+    console.log("D", d);
     reader.onload = await function () {
       console.log(reader.result);
-      return reader.result
+      return reader.result;
     };
     reader.onerror = function (error) {
-      console.log('Error: ', error);
+      console.log("Error: ", error);
     };
- }
+  }
   convertBase64 = async (file) => {
     return await new Promise((resolve, reject) => {
       const fileReader = new FileReader();
@@ -65,10 +84,8 @@ class Fileupload extends Component {
     const uploadImage = async (e) => {
       const file = e.target.files[0];
       const base64 = await convertBase64(file);
-      console.log("base64 image:", base64);
       this.setState({ baseImage: base64 });
     };
-
     const convertBase64 = (file) => {
       return new Promise((resolve, reject) => {
         const fileReader = new FileReader();
@@ -104,6 +121,8 @@ class Fileupload extends Component {
         >
           Submit
         </Button>
+        <h1>
+        </h1>
       </div>
     );
   }
@@ -111,22 +130,19 @@ class Fileupload extends Component {
 
 const mapStateToProps = (state /*, ownProps*/) => {
   return {
-    state: state
-  }
-}
+    state: state,
+  };
+};
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
     // dispatching plain actions
-    save: (data) => dispatch({ type: 'SAVE_FORM', payload: data }),
-    clear: () => dispatch({ type: 'CLEAR_FORM' }),
-  }
-}
+    save: (data) => dispatch({ type: "SAVE_FORM", payload: data }),
+    clear: () => dispatch({ type: "CLEAR_FORM" }),
+  };
+};
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Fileupload)
+export default connect(mapStateToProps, mapDispatchToProps)(Fileupload);
 
 // for material ui button
 

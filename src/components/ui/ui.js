@@ -10,7 +10,6 @@ import Form from "../Form/Form";
 import Fileupload from "../Fileupload/Fileupload";
 import { connect, useDispatch } from "react-redux";
 
-
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
@@ -28,16 +27,14 @@ function getSteps() {
   return ["Select the option", "Please fill up the form", "Create an ad"];
 }
 
-
-const HorizontalLinearStepper = (props)  => {
-
+const HorizontalLinearStepper = (props) => {
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
   const [csvObj, setCsvObj] = useState("");
   const [formData, setFormData] = React.useState("");
   const [skipped, setSkipped] = React.useState(new Set());
   const steps = getSteps();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const isStepOptional = (step) => {
     return step === 1;
@@ -47,19 +44,22 @@ const HorizontalLinearStepper = (props)  => {
     return skipped.has(step);
   };
   const handleCallback = (data) => {
-      handleNext();
+    handleNext();
   };
   const handleFormData = (data) => {
-    console.log("data from form",data)
-    setFormData(data.data)
+    console.log("data from form", data);
+    setFormData(data.data);
     handleNext();
-    console.log("formData",formData)
-  }
+    console.log("formData", formData);
+  };
   const csvData = async (data) => {
-      console.log("data from csv",data.data)
-      await setCsvObj(data.data)
-      console.log("csvObj",csvObj)
-  }
+    console.log("data from csv", data.data);
+    data.data.isDisabled = false;
+    await setCsvObj(data.data);
+    console.log("csvObj", data.data);
+    await props.save(data.data);
+    handleNext();
+  };
 
   const getStepContent = (step) => {
     switch (step) {
@@ -68,7 +68,7 @@ const HorizontalLinearStepper = (props)  => {
       case 1:
         return <Form submitData={handleFormData} />;
       case 2:
-        return <Fileupload />
+        return <Fileupload />;
       default:
         return "Unknown step";
     }
@@ -152,48 +152,29 @@ const HorizontalLinearStepper = (props)  => {
               >
                 Back
               </Button>
-              {/* {isStepOptional(activeStep) && (
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleSkip}
-                  className={classes.button}
-                >
-                  Skip
-                </Button>
-              )} */}
-
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleNext}
-                className={classes.button}
-              >
-                {activeStep === steps.length - 1 ? "Finish" : "Next"}
-              </Button>
             </div>
           </div>
         )}
       </div>
     </div>
   );
-}
+};
 
 const mapStateToProps = (state /*, ownProps*/) => {
   return {
-    state: state
-  }
-}
+    state: state,
+  };
+};
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
     // dispatching plain actions
-    save: (data) => dispatch({ type: 'SAVE_FORM', payload: data }),
-    clear: () => dispatch({ type: 'CLEAR_FORM' }),
-  }
-}
+    save: (data) => dispatch({ type: "SAVE_FORM", payload: data }),
+    clear: () => dispatch({ type: "CLEAR_FORM" }),
+  };
+};
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(HorizontalLinearStepper)
+)(HorizontalLinearStepper);
