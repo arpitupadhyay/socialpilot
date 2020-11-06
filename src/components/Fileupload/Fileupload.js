@@ -3,6 +3,7 @@ import AddIcon from "@material-ui/icons/Add";
 import { Fab } from "@material-ui/core";
 import DnD from "../DnD/DnD";
 import Button from "@material-ui/core/Button";
+import { connect } from "react-redux";
 
 class Fileupload extends Component {
   state = {
@@ -108,7 +109,24 @@ class Fileupload extends Component {
   }
 }
 
-export default Fileupload;
+const mapStateToProps = (state /*, ownProps*/) => {
+  return {
+    state: state
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    // dispatching plain actions
+    save: (data) => dispatch({ type: 'SAVE_FORM', payload: data }),
+    clear: () => dispatch({ type: 'CLEAR_FORM' }),
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Fileupload)
 
 // for material ui button
 

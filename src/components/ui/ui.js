@@ -8,6 +8,8 @@ import Typography from "@material-ui/core/Typography";
 import Button2 from "../Button/Button";
 import Form from "../Form/Form";
 import Fileupload from "../Fileupload/Fileupload";
+import { connect, useDispatch } from "react-redux";
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,7 +29,7 @@ function getSteps() {
 }
 
 
-export default function HorizontalLinearStepper() {
+const HorizontalLinearStepper = (props)  => {
 
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
@@ -35,6 +37,7 @@ export default function HorizontalLinearStepper() {
   const [formData, setFormData] = React.useState("");
   const [skipped, setSkipped] = React.useState(new Set());
   const steps = getSteps();
+  const dispatch = useDispatch()
 
   const isStepOptional = (step) => {
     return step === 1;
@@ -175,3 +178,22 @@ export default function HorizontalLinearStepper() {
     </div>
   );
 }
+
+const mapStateToProps = (state /*, ownProps*/) => {
+  return {
+    state: state
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    // dispatching plain actions
+    save: (data) => dispatch({ type: 'SAVE_FORM', payload: data }),
+    clear: () => dispatch({ type: 'CLEAR_FORM' }),
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(HorizontalLinearStepper)

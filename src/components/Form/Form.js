@@ -1,14 +1,19 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 
 class Form extends Component {
   constructor(props) {
     super(props);
+    // props.state.address
+    // props.state.bedroom
+    // props.state.bathroom
+    // props.state.description
     this.state = {
-      address: '',
-      bedroom: '',
-      bathroom: '',
-      description: '',
-      isDisabled: true,
+      address: props.state.address ? props.state.address : "",
+      bedroom: props.state.bedroom ? props.state.bedroom : "",
+      bathroom: props.state.bathroom ? props.state.bathroom : "",
+      description: props.state.description ? props.state.description : "",
+      isDisabled: props.state.isDisabled === false ? false : true,
     };
     this.handleAddress = this.handleAddress.bind(this);
     this.handleBedroom = this.handleBedroom.bind(this);
@@ -58,6 +63,7 @@ class Form extends Component {
   }
 
   submitForm() {
+    this.props.save(this.state)
     this.props.submitData({data: this.state});
   }
 
@@ -131,4 +137,21 @@ class Form extends Component {
   }
 }
 
-export default Form;
+const mapStateToProps = (state /*, ownProps*/) => {
+  return {
+    state: state
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    // dispatching plain actions
+    save: (data) => dispatch({ type: 'SAVE_FORM', payload: data }),
+    clear: () => dispatch({ type: 'CLEAR_FORM' }),
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Form)
